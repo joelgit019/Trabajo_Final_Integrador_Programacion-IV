@@ -47,7 +47,7 @@ function renderizarTabla(listaIncidencias) {
     if (!Array.isArray(listaIncidencias) || listaIncidencias.length === 0) {
         const row = document.createElement('tr');
         const tdVacio = document.createElement('td');
-        tdVacio.colSpan = 8;
+        tdVacio.colSpan = 9;
         tdVacio.style.textAlign = 'center';
         tdVacio.textContent = 'No se encontraron incidencias.';
         row.appendChild(tdVacio);
@@ -101,6 +101,10 @@ function renderizarTabla(listaIncidencias) {
         const tdCreadopor = document.createElement('td');
         tdCreadopor.textContent = inc.creado_por || inc.creadoPor || '-';
         row.appendChild(tdCreadopor);
+
+        const tdAsignado = document.createElement('td');
+        tdAsignado.textContent = inc.asignado_a || inc.asignadoA || '-';
+        row.appendChild(tdAsignado);
 
         const tdEstado = document.createElement('td');
         const estKey = inc.id_estado ?? inc.estado;

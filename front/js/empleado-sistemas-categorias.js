@@ -82,10 +82,12 @@ async function cargarCategorias(pagina = paginaActual) {
     paginaActual = pagina;
     let url = `${URL_API_CATEGORIAS}?page=${paginaActual}&limit=${limitePorPagina}`;
     if (textoFiltro) {
-        url += `&search=${encodeURIComponent(textoFiltro)}`;
+        url += `&descripcion=${encodeURIComponent(textoFiltro)}&search=${encodeURIComponent(textoFiltro)}`;
     }
     if (modoPapelera) {
         url += `&activo=0`;
+    } else {
+        url += `&activo=1`;
     }
 
     try {
@@ -98,6 +100,11 @@ async function cargarCategorias(pagina = paginaActual) {
         });
         if (response.ok) {
             const data = await response.json();
+            const listado = data.categorias || data;
+            if (Array.isArray(listado) && listado.length === 0 && paginaActual > 1) {
+                cargarCategorias(paginaActual - 1);
+                return;
+            }
             if (data.categorias) {
                 categorias = data.categorias;
                 renderizarTabla(data.categorias);
@@ -128,7 +135,9 @@ function renderizarTabla(categ) {
         const tdVacio = document.createElement('td');
         tdVacio.colSpan = 4;
         tdVacio.style.textAlign = 'center';
-        tdVacio.textContent = 'No se encontraron categorías.';
+        tdVacio.textContent = modoPapelera 
+            ? 'No hay categorías en la papelera.' 
+            : 'No se encontraron categorías.';
         row.appendChild(tdVacio);
         tbody.appendChild(row);
         return;

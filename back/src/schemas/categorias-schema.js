@@ -34,7 +34,8 @@ export const BaseCategoriasSchema = z.object({
 
 export const getAllCategoriasSchema = BaseCategoriasSchema
     .extend({
-        "page": z.coerce.number().int().positive().optional()
+        "page": z.coerce.number().int().positive().optional(),
+        "search": z.string().optional()
     })
     .partial({
         "id_categoria": true,

@@ -99,4 +99,40 @@ export class CategoriasRepository{
         return rows[0];
         
     }
+
+    static async reactivar(input) {
+        console.log("Repository reactivar");
+        const { id_categoria } = input;
+
+        const sql = `
+            UPDATE categorias
+            SET activo = 1
+            WHERE id_categoria = $1
+            RETURNING *;
+        `;
+        const { rows } = await pool.query(sql, [id_categoria]);
+        return rows[0];
+    }
+
+    static async eliminarDefinitivo(input) {
+        console.log("Repository eliminarDefinitivo");
+        const { id_categoria } = input;
+
+        // Verificar si hay artículos vinculados a esta categoría
+        const checkSql = `SELECT COUNT(*) as total FROM articulos WHERE id_categoria = $1;`;
+        const { rows: checkRows } = await pool.query(checkSql, [id_categoria]);
+        const total = parseInt(checkRows[0].total, 10);
+
+        if (total > 0) {
+            throw new Error(`La categoría tiene ${total} artículo(s) vinculado(s) y no se puede eliminar definitivamente.`);
+        }
+
+        const sql = `
+            DELETE FROM categorias
+            WHERE id_categoria = $1
+            RETURNING *;
+        `;
+        const { rows } = await pool.query(sql, [id_categoria]);
+        return rows[0];
+    }
 }

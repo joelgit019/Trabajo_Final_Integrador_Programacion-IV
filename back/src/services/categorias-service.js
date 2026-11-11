@@ -31,4 +31,15 @@ export class CategoriasService{
         console.log(resultado);
         return await this.getByID(resultado);
     }
+
+    static async reactivar(input){
+        console.log("Service reactivar");
+        const resultado = await CategoriasRepository.reactivar(input);
+        return await this.getByID(resultado);
+    }
+
+    static async eliminarDefinitivo(input){
+        console.log("Service eliminarDefinitivo");
+        return await CategoriasRepository.eliminarDefinitivo(input);
+    }
 }

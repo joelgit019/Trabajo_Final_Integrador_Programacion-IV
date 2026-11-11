@@ -8,6 +8,7 @@ let modoPapelera = false;
 
 const URL_API_ARTICULOS = 'http://localhost:3000/api/articulos';
 const URL_API_CATEGORIAS = 'http://localhost:3000/api/categorias';
+const URL_API_AREAS = 'http://localhost:3000/api/areas';
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -73,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('modalTitulo').textContent = 'Nuevo Artículo';
             document.getElementById('btn-confirmar-creacion').textContent = 'Añadir Artículo';
             
-            await cargarSelectorCategorias();
+            await Promise.all([cargarSelectorAreas(), cargarSelectorCategorias()]);
             modal.style.display = 'flex';
         });
     }
@@ -83,11 +84,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+async function cargarSelectorAreas() {
+    try {
+        const token = sessionStorage.getItem('token');
+        if (!token) return;
+        const res = await fetch(`${URL_API_AREAS}?activo=1`, {
+            method: 'GET',
+            headers: { 'Authorization': `Bearer ${token}`}
+        });
+        if (res.ok) {
+            const data = await res.json();
+            const listado = data.areas || data;
+            const selectArea = document.getElementById('selector-area');
+            selectArea.textContent = '';
+            const optDefault = document.createElement('option');
+            optDefault.value = '';
+            optDefault.textContent = '-- Seleccionar Área --';
+            selectArea.appendChild(optDefault);
+            listado.forEach(a => {
+                const opt = document.createElement('option');
+                opt.value = a.id_area;
+                opt.textContent = a.descripcion;
+                selectArea.appendChild(opt);
+            });
+        }
+    } catch (err) {
+        console.error("Error cargando áreas dinámicas:", err);
+    }
+}
+
 async function cargarSelectorCategorias() {
     try {
         const token = sessionStorage.getItem('token');
         if (!token) return;
-        const res = await fetch(`${URL_API_CATEGORIAS}?limit=100`, {
+        const res = await fetch(`${URL_API_CATEGORIAS}?limit=100&activo=1`, {
             method: 'GET',
             headers: { 'Authorization': `Bearer ${token}`}
         });
@@ -277,7 +307,7 @@ async function editarArticulo(id) {
              throw new Error('Formato de datos no esperado de la API');
         }
 
-        await cargarSelectorCategorias();
+        await Promise.all([cargarSelectorAreas(), cargarSelectorCategorias()]);
 
         document.getElementById('articulo-id').value = art.id_articulo;
         document.getElementById('input-descripcion').value = art.descripcion;

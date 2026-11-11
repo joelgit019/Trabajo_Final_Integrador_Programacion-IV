@@ -6,6 +6,8 @@ import { createArticulosRouter } from '../routers/articulosRouters.js';
 import { ArticulosService } from '../services/articulos-service.js';
 import { createCategoriasRouter } from '../routers/categoriaRouters.js';
 import { CategoriasService } from "../services/categorias-service.js";
+import { createAreasRouter } from '../routers/areasRouters.js';
+import { AreasService } from '../services/areas-service.js';
 import { createIncidenciasRouter } from '../routers/incidenciasRouters.js';
 import { IncidenciasService } from '../services/incidencias-service.js';
 import rateLimit from 'express-rate-limit';
@@ -52,6 +54,9 @@ app.use("/api/articulos", createArticulosRouter({articulosService : ArticulosSer
 
 //CATEGORIAS
 app.use("/api/categorias", createCategoriasRouter({categoriasService : CategoriasService}));
+
+//AREAS
+app.use("/api/areas", createAreasRouter({areasService : AreasService}));
 
 //INCIDENCIAS
 app.use("/api/incidencias", createIncidenciasRouter({incidenciasService : IncidenciasService}));

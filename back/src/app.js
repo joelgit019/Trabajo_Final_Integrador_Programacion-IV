@@ -9,11 +9,13 @@ import { fileURLToPath } from 'url';
 import { createIncidenciasRouter } from '../routers/incidenciasRouters.js';
 import { createArticulosRouter } from '../routers/articulosRouters.js';
 import { createCategoriasRouter } from '../routers/categoriaRouters.js';
+import { createAreasRouter } from '../routers/areasRouters.js';
 
 // IMPORT SERVICES
 import { IncidenciasService } from './services/incidencias.service.js';
 import { ArticulosService } from './services/articulos.service.js';
 import { CategoriasService } from './services/categorias.service.js';
+import { AreasService } from './services/areas-service.js';
 import { getEmpleadosSistemas } from './controller/usuariosController.js'; // Legacy por ahora
 
 const __filename = fileURLToPath(import.meta.url);
@@ -30,6 +32,7 @@ app.use(express.json());
 app.use('/api/incidencias', createIncidenciasRouter({ incidenciasService: IncidenciasService }));
 app.use('/api/articulos', createArticulosRouter({ articulosService: ArticulosService }));
 app.use('/api/categorias', createCategoriasRouter({ categoriasService: CategoriasService }));
+app.use('/api/areas', createAreasRouter({ areasService: AreasService }));
 
 // Legacy
 app.get('/api/usuarios/sistemas', getEmpleadosSistemas);

@@ -13,12 +13,15 @@ export const getAllTransform = (req, res, next)  => {
         limit = 5,
         order_column = 'id_categoria',
         direction = 'asc',
+        search,
         ...filtros
     } = schema.data;
 
     const offset = (page - 1) * limit;
 
-    req.criteria = { ...filtros, order_column, direction, limit, offset };
+    const descripcion = filtros.descripcion || search;
+
+    req.criteria = { ...filtros, descripcion, order_column, direction, limit, offset };
     next();
 }
 
