@@ -13,8 +13,8 @@
     "dev": "node back/src/web/index.js"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14",
-    "vite": "^8.2.2"
+    "nodemon": "^3.1.11",
+    "vite": "^8.3.8"
   },
   "dependencies": {
     "cors": "^2.8.6",
@@ -29,7 +29,7 @@
     "nodemailer": "^10.4.0",
     "pdfkit": "^0.20.2",
     "pg": "^8.23.0",
-    "swagger-jsdoc": "^6.3.0",
+    "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "zod": "^4.6.5"
   },
